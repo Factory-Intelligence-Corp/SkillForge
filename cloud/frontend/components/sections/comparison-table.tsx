@@ -15,9 +15,9 @@ export default function ComparisonTable() {
               href="https://www.meta.com/en-gb/experiences/phospho-teleoperation/8873978782723478/?srsltid=AfmBOorMv4FFiW1uSPvz9cEgsrwhRa5r0-eQ7P-9RRSLcchwzJkBTzoB"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-phospho-green hover:text-phospho-green-dark underline transition-colors"
+              className="text-primary hover:text-primary/80 underline transition-colors"
             >
-              phospho teleoperation app
+              SkillForge teleoperation app
             </a>{" "}
             to control your robot in VR.
           </div>
@@ -47,7 +47,7 @@ export default function ComparisonTable() {
       free: false,
       pro: true,
     },
-    { name: "phospho pro Discord badge", free: false, pro: true },
+    { name: "SkillForge Pro Discord badge", free: false, pro: true },
   ];
 
   const renderFeatureValue = (value: boolean | string) => {
@@ -69,7 +69,7 @@ export default function ComparisonTable() {
           <div className="p-6 invisible">Features</div>
           <div className="p-6 text-center text-dark-gray">Free</div>
           <div className="p-6 text-center font-bold text-dark-gray bg-green-50">
-            phospho pro
+            SkillForge Pro
           </div>
         </div>
 

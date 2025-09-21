@@ -77,7 +77,7 @@ export function NetworkPage() {
       const response = await fetch("/network/hotspot", { method: "POST" });
       if (response.ok) {
         showMessage(
-          'Hotspot activated. Find "phosphobot" in available networks.',
+          'Hotspot activated. Find "SkillForge" in available networks.',
           "success",
         );
       } else if (response.status === 400) {
@@ -200,7 +200,7 @@ export function NetworkPage() {
             <CardContent>
               <div className="space-y-2 text-sm">
                 <p>
-                  <strong>SSID:</strong> phosphobot
+                  <strong>SSID:</strong> SkillForge
                 </p>
                 <p>
                   <strong>Password:</strong> phosphobot123

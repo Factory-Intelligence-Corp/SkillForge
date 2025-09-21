@@ -1,4 +1,3 @@
-import { PhosphoProCallout } from "@/components/callout/phospho-pro";
 import { AutoComplete, type Option } from "@/components/common/autocomplete";
 import { CopyButton } from "@/components/common/copy-button";
 import { LogStream } from "@/components/custom/LogsStream";
@@ -278,7 +277,6 @@ export function AITrainingPage() {
 
   return (
     <div className="container mx-auto py-2 flex flex-col gap-2">
-      {!proUser && <PhosphoProCallout />}
       <Card className="w-full">
         <CardContent>
           <div className="flex flex-col md:flex-row gap-2 items-end">

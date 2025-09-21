@@ -64,7 +64,7 @@ function HomeContent() {
   }, [searchParams, userEmail]);
 
   return (
-    <div className="bg-gray-background min-h-screen font-sans">
+    <div className="bg-background min-h-screen font-sans">
       <Header />
       <main className="container mx-auto px-4 max-w-7xl">
         <HeroSection />

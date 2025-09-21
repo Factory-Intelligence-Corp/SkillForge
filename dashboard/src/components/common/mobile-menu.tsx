@@ -64,7 +64,7 @@ export function MobileMenu() {
                 currentPath === "/control" ? "bg-accent" : "hover:bg-accent/50"
               }`}
             >
-              <Play className="h-4 w-4 text-green-500" />
+              <Play className="h-4 w-4 text-primary" />
               Control Robot
             </a>
             <a

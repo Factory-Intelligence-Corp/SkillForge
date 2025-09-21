@@ -563,7 +563,7 @@ export function BrowsePage() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <BreadcrumbLink asChild>
-                      <Link to="/browse">phosphobot</Link>
+                      <Link to="/browse">SkillForge</Link>
                     </BreadcrumbLink>
                   </TooltipTrigger>
                   <TooltipContent>

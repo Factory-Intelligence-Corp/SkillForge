@@ -7,7 +7,7 @@ export default function FinalCTASection() {
     <section className="py-16 px-8 bg-gray-background">
       <div className="max-w-md mx-auto bg-white rounded-xl p-8 shadow-card">
         <h2 className="text-3xl font-headline font-bold text-dark-gray mb-4">
-          Get phospho pro now.
+          Get SkillForge Pro now.
         </h2>
 
         <p className="text-medium-gray mb-8">

@@ -28,7 +28,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="border-r pt-16">
-      <SidebarContent>
+      <SidebarContent className="pt-8">
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -55,7 +55,7 @@ export function AppSidebar() {
                   isActive={currentPath === "/control"}
                 >
                   <Link to="/control">
-                    <Play className="h-5 w-5 text-green-500" />
+                    <Play className="h-5 w-5 text-primary" />
                     <span>Control Robot</span>
                   </Link>
                 </SidebarMenuButton>

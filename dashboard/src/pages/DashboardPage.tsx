@@ -1,4 +1,3 @@
-import { PhosphoProCallout } from "@/components/callout/phospho-pro";
 import { AIControlDisclaimer } from "@/components/common/ai-control-disclaimer";
 import { HuggingFaceKeyInput } from "@/components/common/huggingface-key";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -16,7 +15,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAuth } from "@/context/AuthContext";
 import { fetcher } from "@/lib/utils";
 import { AdminTokenSettings, ServerStatus } from "@/types";
 import {
@@ -78,7 +76,7 @@ function RobotStatusAlert({
     return (
       <Alert>
         <AlertTitle className="flex flex-row gap-1 items-center">
-          <span className="size-2 rounded-full bg-green-500" />
+          <span className="size-2 rounded-full bg-primary" />
           <Bot className="size-5 mr-1" />
           Status: Connected
         </AlertTitle>
@@ -104,22 +102,34 @@ function RobotStatusAlert({
   }
 }
 
-function AIModelsCard() {
+
+export function DashboardPage() {
   const [showWarning, setShowWarning] = useState(false);
-
   const navigate = useNavigate();
-
-  const { data: adminSettingsTokens, isLoading } = useSWR<AdminTokenSettings>(
+  
+  const { data: serverStatus, isLoading } = useSWR<ServerStatus>(
+    ["/status"],
+    ([url]) => fetcher(url),
+    {
+      refreshInterval: 5000,
+    },
+  );
+  
+  const { data: adminSettingsTokens } = useSWR<AdminTokenSettings>(
     ["/admin/settings/tokens"],
     ([url]) => fetcher(url, "POST"),
   );
+
+  const robotConnected =
+    serverStatus !== undefined &&
+    serverStatus.robots &&
+    serverStatus.robots.length > 0;
 
   const handleControlByAI = () => {
     if (localStorage.getItem("disclaimer_accepted") === "true") {
       navigate(`/inference`);
       return;
     }
-    // Otherwise display the warning dialog
     setShowWarning(true);
   };
 
@@ -130,63 +140,124 @@ function AIModelsCard() {
   };
 
   return (
-    <>
-      <Card className="flex justify-between md:min-h-[25vh]">
-        <CardContent className="flex flex-col md:flex-row py-6">
-          <div className="flex-1 md:flex-1/3 mb-4 md:mb-0">
-            <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <BrainCircuit className="text-green-500" />
-              AI Training and Control
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
+      {/* Robot Control Section */}
+      <div className="lg:col-span-2">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Play className="size-6 text-primary" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-foreground">Control and Record</h2>
+                </div>
+                <p className="text-muted-foreground">
+                  Control the robot with your keyboard, a leader arm, or a VR headset. Record and replay movements. Record datasets.
+                </p>
+              </div>
             </div>
-            <div className="text-xs text-muted-foreground">
-              Teach your robot new skills. Control your robot with Artificial
-              Intelligence.
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <RobotStatusAlert
+                serverStatus={serverStatus}
+                isLoading={isLoading}
+                robotConnected={robotConnected}
+              />
+              
+              <div className="flex items-center">
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="w-full h-16"
+                  disabled={!robotConnected}
+                  onClick={() => {
+                    if (!robotConnected) return;
+                    navigate("/control");
+                  }}
+                >
+                  <Play className="size-5 mr-2" />
+                  Start Control Session
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="flex-1 md:flex-2/3">
-            <div className="flex flex-col gap-y-4">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <Button asChild variant="outline" size="lg">
+                <a href="/browse" className="h-12">
+                  <FolderOpen className="size-5 mr-2" />
+                  Browse Datasets
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <a href="/calibration" className="h-12">
+                  <Sliders className="size-5 mr-2" />
+                  Calibration
+                </a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* AI Training and Control */}
+      <Card>
+        <CardContent className="p-6 h-full">
+          <div className="flex flex-col h-full">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <BrainCircuit className="size-6 text-primary" />
+              </div>
+              <h2 className="text-xl font-bold text-foreground">AI Training and Control</h2>
+            </div>
+            <p className="text-muted-foreground text-sm mb-6">
+              Teach your robot new skills. Control your robot with Artificial Intelligence.
+            </p>
+
+            <div className="flex-1 flex flex-col justify-between">
               {!isLoading && !adminSettingsTokens?.huggingface && (
                 <div className="mb-4">
                   <HuggingFaceKeyInput />
                 </div>
               )}
 
-              <div className="flex flex-col md:flex-row gap-2">
+              <div className="space-y-3">
                 <Tooltip>
-                  <TooltipTrigger className="flex-1/2" asChild>
+                  <TooltipTrigger asChild>
                     <Button
                       variant="outline"
-                      onClick={() => {
-                        navigate("/train");
-                      }}
+                      size="lg"
+                      className="w-full h-12"
+                      onClick={() => navigate("/train")}
                       disabled={!adminSettingsTokens?.huggingface}
                     >
-                      <Dumbbell className="size-5" />
+                      <Dumbbell className="size-5 mr-2" />
                       Train an AI Model
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
                     <div>
-                      Once you have recorded a dataset, you can train an AI
-                      model. Make sure you have a HuggingFace account and a
-                      valid API key.
+                      Once you have recorded a dataset, you can train an AI model. Make sure you have a HuggingFace account and a valid API key.
                     </div>
                   </TooltipContent>
                 </Tooltip>
+                
                 <Tooltip>
-                  <TooltipTrigger className="flex-1/2" asChild>
+                  <TooltipTrigger asChild>
                     <Button
+                      size="lg"
+                      className="w-full h-12"
                       onClick={handleControlByAI}
                       disabled={!adminSettingsTokens?.huggingface}
                     >
-                      <BrainCircuit className="size-5" />
+                      <BrainCircuit className="size-5 mr-2" />
                       Go to AI Control
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
                     <div>
-                      After training your AI model, let your AI model control
-                      the robot.
+                      After training your AI model, let your AI model control the robot.
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -195,14 +266,61 @@ function AIModelsCard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Advanced Settings */}
+      <Card>
+        <CardContent className="p-6 h-full">
+          <div className="flex flex-col h-full">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Settings className="size-6 text-primary" />
+              </div>
+              <h2 className="text-xl font-bold text-foreground">Advanced Settings</h2>
+            </div>
+            <p className="text-muted-foreground text-sm mb-6">
+              Configure the server and the robot settings.
+            </p>
+
+            <div className="flex-1 flex flex-col justify-between">
+              <div className="grid grid-cols-1 gap-3">
+                <Button asChild variant="secondary" size="lg">
+                  <a href="/admin" className="h-12">
+                    <FileCog className="size-5 mr-2" />
+                    Admin Configuration
+                  </a>
+                </Button>
+                <Button asChild variant="secondary" size="lg">
+                  <a href="/docs" className="h-12">
+                    <Code className="size-5 mr-2" />
+                    API Documentation
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <a href="/viz" className="h-12">
+                    <Camera className="size-5 mr-2" />
+                    Camera Overview
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <a href="/network" className="h-12">
+                    <Network className="size-5 mr-2" />
+                    Network Management
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* AI Control Warning Dialog */}
       <Dialog open={showWarning} onOpenChange={setShowWarning}>
         <DialogContent className="sm:max-w-md border-amber-300 border">
           <DialogHeader className="bg-amber-50 dark:bg-amber-950/20 p-4 -m-4 rounded-t-lg">
             <div className="flex items-center gap-2 mb-2">
               <AlertTriangle className="size-16 text-red-500 mr-2" />
               <DialogTitle className="text-bold font-bold tracking-tight">
-                You are about to surrender control to an artificial intelligence
-                system.
+                You are about to surrender control to an artificial intelligence system.
               </DialogTitle>
             </div>
           </DialogHeader>
@@ -223,134 +341,6 @@ function AIModelsCard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
-  );
-}
-
-export function DashboardPage() {
-  const navigate = useNavigate();
-  const { proUser } = useAuth();
-  const { data: serverStatus, isLoading } = useSWR<ServerStatus>(
-    ["/status"],
-    ([url]) => fetcher(url),
-    {
-      refreshInterval: 5000,
-    },
-  );
-  const robotConnected =
-    serverStatus !== undefined &&
-    serverStatus.robots &&
-    serverStatus.robots.length > 0;
-
-  return (
-    <div className="flex flex-col gap-4">
-      {/* Phospho Pro Callout */}
-      {!proUser && <PhosphoProCallout />}
-      {/* Control */}
-      <Card className="flex justify-between md:min-h-[25vh]">
-        <CardContent className="w-full flex flex-row gap-4">
-          <div className="flex-1/3">
-            <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <Play className="text-green-500" />
-              Control and Record
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Control the robot with your keyboard, a leader arm, or a VR
-              headset. Record and replay movements. Record datasets.
-            </div>
-          </div>
-
-          <div className="flex-2/3">
-            <div className="mb-2 flex flex-col md:flex-row gap-2">
-              <div className="flex-1/2">
-                <RobotStatusAlert
-                  serverStatus={serverStatus}
-                  isLoading={isLoading}
-                  robotConnected={robotConnected}
-                />
-              </div>
-
-              <div className="flex-1/2">
-                <Button
-                  variant="default"
-                  className="w-full h-full"
-                  disabled={!robotConnected}
-                  onClick={() => {
-                    if (!robotConnected) return;
-                    navigate("/control");
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <Play className="text-green-500" />
-                    Control
-                  </div>
-                </Button>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <Button asChild variant="outline">
-                <a href="/browse">
-                  <FolderOpen className="size-5" />
-                  Browse your Datasets
-                </a>
-              </Button>
-              <Button asChild variant="outline">
-                <a href="/calibration">
-                  <Sliders className="size-5" />
-                  Calibration
-                </a>
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* AI Models */}
-      <AIModelsCard />
-
-      {/* Advanced Settings */}
-      <Card className="flex justify-between md:min-h-[25vh]">
-        <CardContent className="flex justify-between">
-          <div className="flex-1/3">
-            <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <Settings className="text-green-500" />
-              Advanced Settings
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Configure the server and the robot settings.
-            </div>
-          </div>
-          <div className="flex-2/3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <Button asChild variant="secondary">
-                <a href="/admin">
-                  <FileCog className="size-5" />
-                  Admin Configuration
-                </a>
-              </Button>
-              <Button asChild variant="secondary">
-                <a href="/docs">
-                  <Code className="size-5" />
-                  API Documentation
-                </a>
-              </Button>
-
-              <Button asChild variant="outline">
-                <a href="/viz">
-                  <Camera className="size-5" />
-                  Camera Overview
-                </a>
-              </Button>
-              <Button asChild variant="outline">
-                <a href="/network">
-                  <Network className="size-5" />
-                  Network Management
-                </a>
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

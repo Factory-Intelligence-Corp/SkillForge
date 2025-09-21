@@ -21,10 +21,11 @@ import { fetcher } from "@/lib/utils";
 import { ServerStatus } from "@/types";
 import {
   BookText,
+  Bot,
+  Brain,
   BrainCircuit,
   LogOut,
   Mail,
-  TestTubeDiagonal,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
@@ -128,8 +129,8 @@ export function AIControlStatus() {
               // Link to AI Control page
               <a href="/inference">
                 <span className="relative inline-block">
-                  <span className="animate-ping absolute inline-flex size-5 rounded-full bg-green-400 opacity-75"></span>
-                  <BrainCircuit className="size-5 text-green" />
+                  <span className="animate-ping absolute inline-flex size-5 rounded-full bg-primary opacity-75"></span>
+                  <BrainCircuit className="size-5 text-primary" />
                 </span>
               </a>
             )}
@@ -170,8 +171,8 @@ export function AccountTopBar() {
           <div
             className={`absolute -bottom-2 -right-3 px-1 py-0.5 font-extrabold rounded-sm outline-[0.5px] outline-white font- ${
               proUser
-                ? "bg-black text-green-500 text-[10px]"
-                : "bg-gray-200 text-black text-[10px]"
+                ? "bg-primary text-primary-foreground text-[10px]"
+                : "bg-secondary text-secondary-foreground text-[10px]"
             }`}
           >
             {proUser ? "PRO" : "FREE"}
@@ -186,18 +187,6 @@ export function AccountTopBar() {
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {!proUser && (
-          <DropdownMenuItem asChild>
-            <a
-              href="https://phospho.ai/pro?utm_source=phosphobot_app"
-              className="flex items-center"
-              target="_blank"
-            >
-              <TestTubeDiagonal className="mr-1 size-4 text-green-500" />
-              Upgrade to Pro
-            </a>
-          </DropdownMenuItem>
-        )}
         <DropdownMenuItem asChild>
           <a
             href="mailto:contact@phospho.ai"
@@ -228,20 +217,89 @@ export function TopBar() {
   );
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-background border-b">
+    <div className="fixed top-0 left-0 right-0 z-50 flex flex-col md:flex-row justify-between items-center gap-6 px-6 py-5 bg-background border-b">
       {currentPath === "/" && (
-        <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-green-500">
-            phosphobot
-          </h1>
+        <div className="flex-1 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            {/* Animated Logo */}
+            <div className="flex items-center justify-center w-11 h-11 rounded-lg bg-primary shadow-md animate-pulse">
+              <span className="text-primary-foreground text-xl font-bold">Φ</span>
+            </div>
+            
+            {/* Animated Brand Text */}
+            <div className="flex items-center gap-4">
+              <div className="animate-fade-in-up" style={{animationDelay: '0.2s', animationFillMode: 'both'}}>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                  Factory Intelligence
+                </h1>
+              </div>
+              
+              <div className="animate-fade-in" style={{animationDelay: '0.8s', animationFillMode: 'both'}}>
+                <span className="text-2xl md:text-3xl font-bold text-primary">
+                  |
+                </span>
+              </div>
+              
+              <div className="animate-fade-in-up" style={{animationDelay: '1.2s', animationFillMode: 'both'}}>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                  SkillForge
+                </h1>
+              </div>
+            </div>
+          </div>
+          
+          {/* Centered Animated Brain to Robot Graphic */}
+          <div className="flex-1 flex items-center justify-center animate-fade-in" style={{animationDelay: '1.6s', animationFillMode: 'both'}}>
+            <div className="relative flex items-center gap-8">
+              {/* Brain */}
+              <div className="animate-brain-pulse">
+                <Brain className="size-10 text-primary animate-brain-float" />
+              </div>
+              
+              {/* Training Flow Animation */}
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-0.5 bg-primary animate-training-flow" style={{animationDelay: '3s'}}></div>
+                <div className="w-3 h-0.5 bg-primary animate-training-flow" style={{animationDelay: '3.5s'}}></div>
+                <div className="w-3 h-0.5 bg-primary animate-training-flow" style={{animationDelay: '4s'}}></div>
+                <div className="w-0 h-0 border-l-6 border-l-primary border-y-3 border-y-transparent animate-training-arrow" style={{animationDelay: '4.5s'}}></div>
+              </div>
+              
+              {/* Robot with online indicator */}
+              <div className="relative animate-robot-training">
+                <Bot className="size-10 text-primary animate-robot-glow" />
+                {/* Online indicator - green dot */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-online-indicator" style={{animationDelay: '6s'}}></div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="w-32"></div> {/* Spacer for balance */}
         </div>
       )}
       {currentPath !== "/" && (
-        <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-green-500">
-            {matchedRoute?.title ?? "phosphobot"}
-          </h1>
-        </div>
+        <>
+          {/* Compact branding - left */}
+          <div className="flex items-center gap-3 px-2">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary shadow-sm">
+              <span className="text-primary-foreground text-lg font-bold">Φ</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="font-bold text-foreground text-lg">Factory Intelligence</span>
+              <span className="text-primary text-xl font-bold">|</span>
+              <span className="font-bold text-foreground text-lg">SkillForge</span>
+            </div>
+          </div>
+          
+          {/* Page title - center */}
+          <div className="flex-1 flex items-center justify-center">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+              {matchedRoute?.title}
+            </h1>
+          </div>
+          
+          {/* Spacer to maintain layout balance */}
+          <div className="flex-shrink-0 w-48"></div>
+        </>
       )}
 
       <div className="flex items-center gap-2 md:w-auto">

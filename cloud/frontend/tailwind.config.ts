@@ -15,10 +15,9 @@ export default {
         headline: ['var(--font-instrument-serif)', 'serif'],
       },
       colors: {
-        'primary-green': '#71EF52', // You can adjust this hex value to your preferred green
-        'gray-background': '#f5f5f5',
-        'dark-gray': '#1a1a1a',
-        'medium-gray': '#6b7280',
+        'gray-background': 'hsl(var(--background))', // Use theme background
+        'dark-gray': 'hsl(var(--foreground))', // Use theme foreground
+        'medium-gray': 'hsl(var(--muted-foreground))', // Use theme muted foreground
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

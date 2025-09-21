@@ -377,7 +377,7 @@ export function AIControlPage() {
                   >
                     <ToggleGroupItem value="rad" className="flex-none">
                       <div className="flex items-center w-full">
-                        <TestTubeDiagonal className="mr-1 h-4 w-4 text-green-500" />
+                        <TestTubeDiagonal className="mr-1 h-4 w-4 text-primary" />
                         Radians (default)
                       </div>
                     </ToggleGroupItem>
@@ -392,11 +392,11 @@ export function AIControlPage() {
                       <TooltipContent>
                         <p>
                           <span className="font-semibold">
-                            phosphobot records data in radians.{" "}
+                            SkillForge records data in radians.{" "}
                           </span>
                           <span>
                             Use Radians if you recorded your dataset with
-                            phosphobot.
+                            SkillForge.
                           </span>
                         </p>
                         <p>
@@ -548,7 +548,7 @@ export function AIControlPage() {
                         modelsThatRequirePrompt.includes(selectedModelType))
                     }
                   >
-                    <Play className="size-5 mr-2 text-green-500" />
+                    <Play className="size-5 mr-2 text-primary" />
                     Start AI control
                   </Button>
                 </div>
@@ -578,7 +578,7 @@ export function AIControlPage() {
                     className={`h-16 w-16 rounded-full ${
                       aiStatus?.status === "stopped" ||
                       aiStatus?.status === "paused"
-                        ? "bg-green-500 hover:bg-green-600"
+                        ? "bg-primary hover:bg-primary/80"
                         : "bg-muted-foreground cursor-not-allowed"
                     }`}
                     onClick={
