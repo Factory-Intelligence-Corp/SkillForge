@@ -66,6 +66,16 @@ const ROBOT_TYPES: RobotType[] = [
     fields: [{ name: "ip", label: "IP Address", type: "ip" }],
   },
   {
+    id: "sb-01",
+    name: "StandardBots SB-01",
+    category: "manipulator",
+    image: placeholderSvg,
+    fields: [
+      { name: "url", label: "Robot URL", type: "text", default: "https://mybot.sb.app" },
+      { name: "token", label: "API Token", type: "password" },
+    ],
+  },
+  {
     id: "so-100",
     name: "SO-100 / SO-101",
     category: "manipulator",
@@ -385,7 +395,7 @@ export function RobotConfigModal({
           allowCustomValue={true}
         />
       )}
-      {(field.type === "number" || field.type === "text") && (
+      {(field.type === "number" || field.type === "text" || field.type === "password") && (
         <Input
           id={field.name}
           type={field.type}

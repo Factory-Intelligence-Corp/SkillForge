@@ -16,6 +16,7 @@ from phosphobot.hardware import (
     LeKiwi,
     PiperHardware,
     RemotePhosphobot,
+    SB01Hardware,
     SO100Hardware,
     UnitreeGo2,
     URDFLoader,
@@ -36,6 +37,7 @@ robot_name_to_class = {
     PiperHardware.name: PiperHardware,
     RemotePhosphobot.name: RemotePhosphobot,
     URDFLoader.name: URDFLoader,
+    SB01Hardware.name: SB01Hardware,
 }
 
 

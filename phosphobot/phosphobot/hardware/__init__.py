@@ -7,6 +7,7 @@ from .koch11 import KochHardware
 from .lekiwi import LeKiwi
 from .phosphobot import RemotePhosphobot
 from .piper import PiperHardware
+from .sb01 import SB01Hardware
 from .so100 import SO100Hardware
 from .urdfloader import URDFLoader
 from .wx250s import WX250SHardware
